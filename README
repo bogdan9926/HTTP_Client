@@ -1,0 +1,54 @@
+Popescu Bogdan
+324CC
+Tema 3 PC: Client Web. Comunicatie cu REST API.
+
+Implementare:
+    Implementarea mi-a luat aproximativ 3 zile:
+        -ziua 1, am inteles cum se foloseste json si am implementat pana la 
+        add_book
+        -ziua 2, am implementat restul comenzilor
+        -ziua 3, am implementat error handling-ul
+    
+    Am scris cod in 2 fisiere: client.cpp si requests.cpp. Restul fisierelor
+    sunt din scheletul laboratorului 10.
+
+    In client.cpp am implementat tema propriu-zisa. Intr-un while care se inchide
+doar la trimiterea comenzii exit, citesc de la tastatura. Cand cuvantul citit 
+este o comanda, aplic pasii necesari comenzii respective (citesc elementele
+payload-ului, creez payload-ul folosind JSON, trimit mesajul , primesc raspuns
+si ma ocup de erorile posibile, dupa caz):
+    -register: citesc user/parola, fac JSON, il trimit, primesc raspuns
+    -login: la fel, doar ca salvez cookie-ul primit in raspuns
+    -enter_library: demonstrez ca sunt logat cu ajutorul cookie-ului, primesc
+raspuns si salvez token-ul primit
+    -get_books: demonstrez ca sunt in biblioteca cu ajutorul token-ului, primesc
+raspuns si afisez lista de carti primita in raspuns
+    -get_book: demonstrez ca sunt in biblioteca cu ajutorul token-ului, concatenez
+id-ul cartii la ruta de acces, primesc raspuns si afisez detaliile cartii dorite
+    -add_book: demonstrez ca sunt in biblioteca cu ajutorul token-ului, citesc
+datele noii carti, fac JSON, il trimit, primesc raspuns
+    -delete_book: demonstrez ca sunt in biblioteca cu ajutorul token-ului,
+concatenez id-ul cartii la ruta de acces, primesc raspuns si se sterge cartea
+    -logout: demonstrez ca sunt logat cu ajutorul cookie-ului, primesc raspuns
+si ma deloghez.
+
+
+    Error Handling: 
+    -verificarea raspunsului (daca se primeste mesajul OK sau Created, comanda
+s-a realizat cu succes)
+    -2 variabile care retin locul unde ma aflu: inainte/dupa login sau in biblioteca
+si de care ma folosesc la toate comenzile unde trebuie sa demonstrez ca ma aflu
+unde trebuie
+    -verificarea tipului de payload, daca se doreste un numar si eu scriu la 
+stdin litere, se afiseaza eroare (mai multe detalii in comentariile din cod)
+
+    In requests.cpp am modificat functiile facute la laboratorul 10, si anume
+compute-get-requests si post-requests, si am creat o noua functie pentru 
+stergerea unei carti, compute-delete-requests. Modificarile aduse au fost:
+    -modificarea parametrilor: din char** in char*
+    -stergerea unor parametri, acestia fiind redundanti: cookies_length
+    -adaugarea unor parametri: token
+    -modificarea completarii mesajului, nemaiavand vector de siruri, doar sir
+    
+    JSON: am folosit nlohmann/json, pentru crearea de payload. Dupa crearea
+payload-ului, l-am converit in string si apoi in char*, pt a fi dat ca parametru
